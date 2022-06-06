@@ -69,7 +69,13 @@ class StravaAPI():
         return prepped_activities_df
 
 
+
+
+
 if __name__ == "__main__":
-    s = StravaAPI('codes.json')
+    s = StravaAPI(r'C:\Users\verta\PycharmProjects\paint-the-world\codes.json')
     activities_df = s.get_activities()
     user_df = s.get_user_data()
+
+
+
