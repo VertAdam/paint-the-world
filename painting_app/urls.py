@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.conf.urls import url
-from .views import not_connected_view, connected_view
+from .views import *
 
 # urlpatterns = [
 #     path('', views.index, name ='painting-app-index')
@@ -8,6 +8,9 @@ from .views import not_connected_view, connected_view
 
 urlpatterns = [
     path('', not_connected_view, name='not_connected'),
-    path('masterpiece/', connected_view, name='masterpiece'),
+    path('connected/', connected_view, name='connected'),
+    path('connected/FullPainting', connected_fullpainting, name='ConnectedFull'),
+    path('connected/SelfPortrait', self_portrait, name='SelfPortrait'),
+    path('connected/vsWorld', vs_world, name='vsWorld'),
     url(r"^oauth/", include("social_django.urls", namespace="social")),
 ]
