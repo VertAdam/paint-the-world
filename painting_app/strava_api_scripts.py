@@ -8,17 +8,25 @@ from .mapping import gridcoords_to_polygon, latlong_to_gridcoords
 import datetime
 import time
 import numpy as np
+from sqlalchemy import create_engine
+import environ
+import os
+from paint_the_world import settings
+import random
+
 # All things related to Strava API
 
 class StravaApi:
     def __init__(self, user):
         strava_login = user.social_auth.get(provider='strava')
         self.access_token = strava_login.extra_data['access_token']
+        env = environ.Env()
+        self.engine = create_engine(settings.ENGINE_URL)
 
     # def get_user(self):
     #     x = 1
 
-    def store_activities(self):
+    def store_activities(self, width = 0.001):
         x = 1
         activites_url = "https://www.strava.com/api/v3/athlete/activities"
 
@@ -56,9 +64,7 @@ class StravaApi:
                 lats = []
                 longs = []
                 times = []
-                grid_lats = []
-                grid_longs = []
-                polys = []
+                width = 0.001
 
                 for ind, row in prepped_df.iterrows():
                     for lat, long in row['polylines']:
@@ -67,61 +73,66 @@ class StravaApi:
                         lats.append(lat)
                         longs.append(long)
                         times.append(row['start_date_utc'])
-                        #         grid_lat, grid_long = latlong_to_gridcoords(lat,long)
-                        grid_lats.append(None)
-                        grid_longs.append(None)
-                        polys.append(None)
 
-                grid_df = pd.DataFrame(
-                    {'userID': user_ids, 'activity_id': activities_ids, 'latitude': lats, 'longitude': longs,
-                     'time': times, 'grid_lat': grid_lats, 'grid_long': grid_longs, 'polygon': polys})
+                times = pd.to_datetime(times, utc=True)
 
-                current_activities = list(AllGridData.objects.values_list('activity_id', flat=True).distinct())
-                t0 = time.time()
-                row_times = []
-                n = 0
-                for row in grid_df.itertuples():
-                    if str(row.activity_id) not in current_activities:
-                        t1 = time.time()
-                        grid_lat, grid_long = latlong_to_gridcoords(row.latitude, row.longitude)
-                        all_grid_instance = AllGridData(userID=row.userID, activity_id=row.activity_id,
-                                                        latitude=row.latitude, longitude=row.longitude, time=row.time,
-                                                        grid_lat = grid_lat, grid_long = grid_long)
-                        t2 = time.time()
-                        all_grid_instance.save()
-                        t3 = time.time()
-                        canvas_grid = CanvasGridData.objects.filter(grid_lat=all_grid_instance.grid_lat).filter(
-                            grid_long=all_grid_instance.grid_long)
-                        t4 = time.time()
-                        if canvas_grid.exists():
-                            t5 = time.time()
-                            if row.time.replace(
-                                    tzinfo=datetime.timezone.utc) > canvas_grid.values()[0]['time']:# datetime.datetime.strptime(row.time, '%Y-%m-%dT%H:%M:%SZ')
-                                canvas_grid[0].delete()
-                                canvas_instance = CanvasGridData(userID=row.userID, activity_id=row.activity_id,
-                                                                 latitude=row.latitude, longitude=row.longitude,
-                                                                 time=row.time, grid_lat = grid_lat,
-                                                                 grid_long = grid_long)
-                                canvas_instance.save()
-                        else:
-                            t6 = time.time()
-                            canvas_instance = CanvasGridData(userID=row.userID, activity_id=row.activity_id,
-                                                             latitude=row.latitude, longitude=row.longitude,
-                                                             time=row.time, grid_lat = grid_lat,
-                                                             grid_long = grid_long)
-                            canvas_instance.save()
-                        t7 = time.time()
-                        row_times.append(t7-t1)
-                        n+=1
-                        if n %100 == 0:
-                            print("row_time", np.mean(row_times), np.median(row_times))
-                            print("allgrid_instance_time", t2 - t1)
-                            print("allgrid_save_time", t3-t2)
-                            print("filter_out_canvas_grid", t4-t3)
-                            print("canvas_grid time ", t7-t4)
+                user_grid_df = pd.DataFrame(
+                    {'activity_id': activities_ids, 'userID': user_ids, 'latitude': lats, 'longitude': longs,
+                     'time': times})
+
+                user_grid_df['grid_lat'] = round((user_grid_df['latitude'] + 90) / width).astype('int64')
+                user_grid_df['grid_long'] = round((user_grid_df['longitude'] + 180) / width).astype('int64')
+
+                full_grid_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', self.engine)
+                full_grid_df['time'] = pd.to_datetime(full_grid_df['time'], utc=True)
+
+                new_grid_df = pd.concat([user_grid_df, full_grid_df]).drop_duplicates()
+
+                canvas_df = pd.DataFrame(new_grid_df.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
+                canvas_df = canvas_df[
+                    ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
+
+                new_activities = (~user_grid_df['activity_id'].isin(full_grid_df['activity_id'])).sum()
+                if new_activities != 0:
+                    new_grid_df.to_sql("painting_app_allgriddata", self.engine, if_exists='replace', index=False)
+                    canvas_df.to_sql("painting_app_canvasgriddata", self.engine, if_exists='replace', index=False)
+                return new_activities
 
             prepped_df = prep_activities_df(activities_df)
-            prepped_to_sql(prepped_df)
+            new_activities = prepped_to_sql(prepped_df)
+            return new_activities
+        new_activities = clean_data(activities_df)
+        return new_activities
 
-        clean_data(activities_df)
-        return 'abc'
+    def get_user_data(self):
+        user_url = "https://www.strava.com/api/v3/athlete"
+
+        access_token = self.access_token
+
+        header = {'Authorization': 'Bearer ' + access_token}
+
+        user_json = requests.get(user_url, headers=header).json()
+        user_data = pd.json_normalize(user_json)
+        print(user_data)
+
+        current_users_df = pd.read_sql('SELECT * FROM \"painting_app_users\"', self.engine)
+        print(user_data['id'][0])
+        print(current_users_df['id'].tolist())
+        print(user_data['id'][0] in current_users_df['id'].tolist())
+        print('hi')
+
+        if not user_data['id'][0] in current_users_df['id'].tolist():
+            clr = random.choice(settings.COLOURS)
+            user_data['color'] = clr
+            user_data = user_data[['id','username','firstname','lastname','sex','city','state','country','color']]
+            current_users_df = pd.concat([current_users_df,user_data])
+            print('first path')
+
+        else:
+            clr = current_users_df['color'].loc[current_users_df['id'] == user_data['id'][0]]
+            user_data['color'] = clr
+            user_data = user_data[['id', 'username', 'firstname', 'lastname', 'sex', 'city', 'state', 'country', 'color']]
+            current_users_df.loc[current_users_df['id'] == user_data['id'][0], :] = user_data
+            print('second path')
+        print(current_users_df)
+        current_users_df.to_sql("painting_app_users", self.engine, if_exists='replace', index=False)
