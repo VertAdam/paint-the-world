@@ -4,8 +4,10 @@ from .models import CanvasGridData
 from .mapping import add_polygons, get_poly_details
 import random
 from .strava_api_scripts import StravaApi
-from paint_the_world.settings import BASE_DIR
+from paint_the_world.settings import BASE_DIR, ENGINE_URL
 import os
+import pandas as pd
+from sqlalchemy import create_engine
 
 def not_connected_view(request):
     # map1 = folium.Map(tiles='stamentoner', location = [43.45005, -80.42766], zoom_start = 15,prefer_canvas = True)
@@ -44,12 +46,6 @@ def connected_view(request):
 
 def connected_fullpainting(request):
     path = os.path.join(BASE_DIR, 'templates', 'maps', 'full_map.txt')
-
-    map1 = folium.Map(tiles='stamentoner', location = [43.45005, -80.42766], zoom_start = 15,prefer_canvas = True)
-
-    grid_lats, grid_longs, colors, times = get_poly_details('full')
-    add_polygons(map1, grid_lats,grid_longs, path =  path, colors = colors, times = times)
-
     context ={
         'map_path': path
     }
@@ -83,3 +79,15 @@ def vs_world(request):
         'map_path': path
     }
     return render(request, 'painting_app/connected.html', context)
+
+def change_color(request):
+    engine = create_engine(ENGINE_URL)
+    userID = request.user.social_auth.get(provider = 'strava').uid
+    current_users_df = pd.read_sql('SELECT * FROM \"painting_app_users\"', engine)
+
+    clr = request.GET.get('name')
+    current_users_df.loc[current_users_df['id'] ==  int(userID), 'color'] = [clr]
+    current_users_df.to_sql("painting_app_users", engine, if_exists='replace', index=False)
+
+    response = redirect('/connected/SelfPortrait')
+    return response

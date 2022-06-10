@@ -17,7 +17,7 @@
 <!--    </div>-->
 <!--</nav>-->
 <nav class="navbar navbar-expand-lg navbar-info bg-info">
-  <a class="navbar-brand text-white" href="#">Navbar</a>
+  <a class="navbar-brand text-white" href="FullPainting">Paint The World</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -25,31 +25,38 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link text-white" href="">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link text-white" href="FullPainting">Full Painting <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="SelfPortrait">Your Painting</a>
+        <a class="nav-link text-grey disabled" href="SelfPortrait">Your Painting</a>
       <li class="nav-item">
       <li class="nav-item">
-        <a class="nav-link disabled" href="vsWorld">You vs The World</a>
+        <a class="nav-link text-grey disabled" href="vsWorld">You vs The World</a>
       <li class="nav-item dropdown ">
         <a class="nav-link text-grey dropdown-toggle disabled" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           My Color
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item disabled" href="#">Action</a>
-          <a class="dropdown-item disabled" href="#">Another action</a>
-          <div class="dropdown-divider disabled"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=RED'" type="button" class="dropdown-item">Red</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=ORANGE'" type="button" class="dropdown-item">Orange</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=YELLOW'" type="button" class="dropdown-item">Yellow</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=GREEN'" type="button" class="dropdown-item">Green</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=BLUE'" type="button" class="dropdown-item">Blue</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=INDIGO'" type="button" class="dropdown-item">Indigo</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=VIOLET'" type="button" class="dropdown-item">Violet</a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled">Groups (to be implemented)</a>
+        <a class="nav-link disabled">Stats (Coming soon!)</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled">Groups (Eventually)</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
+              <a class="nav-link text-white" href="vsWorld">About Me</a>
               <a href="{% url 'social:begin' 'strava' %}" class="btn btn-primary" role="button"
-            aria-disabled="true">See Analysis</a>
+            aria-disabled="true">Connect to Strava</a>
     </form>
   </div>
 </nav>

@@ -12,5 +12,6 @@ urlpatterns = [
     path('connected/FullPainting', connected_fullpainting, name='ConnectedFull'),
     path('connected/SelfPortrait', self_portrait, name='SelfPortrait'),
     path('connected/vsWorld', vs_world, name='vsWorld'),
+    path('connected/change_color', change_color, name='change_color'),
     url(r"^oauth/", include("social_django.urls", namespace="social")),
 ]
