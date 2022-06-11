@@ -36,7 +36,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['.herokuapp.com']
 
-
+WSGI_APPLICATION = 'paint_the_world.wsgi.application'
 COLOURS=['RED','ORANGE','YELLOW','GREEN','BLUE','INDIGO']
 
 # Application definition

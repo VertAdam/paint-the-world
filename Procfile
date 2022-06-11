@@ -1,1 +1,0 @@
-web: gunicorn paint_the_world.wsgi — log-file -
