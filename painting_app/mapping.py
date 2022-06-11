@@ -69,8 +69,7 @@ def get_poly_details(map_type, userID = None):
         all_points_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', engine)
 
         personal_canvas = all_points_df.loc[all_points_df['userID'] == int(userID)]
-
-        personal_canvas = pd.DataFrame(personal_canvas.groupby(['grid_lat', 'grid_long']).max()).reset_index()
+        personal_canvas = pd.DataFrame(personal_canvas.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
         personal_canvas = personal_canvas[
             ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
 
