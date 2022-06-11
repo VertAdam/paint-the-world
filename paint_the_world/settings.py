@@ -26,12 +26,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+from decouple import config
+import dj_database_url
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['paint-the-world.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 COLOURS=['RED','ORANGE','YELLOW','GREEN','BLUE','INDIGO']
@@ -63,8 +66,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'paint_the_world.urls'
 
-ENGINE_URL = os.environ.get('ENGINE_URL')
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# ENGINE_URL = os.environ.get('ENGINE_URL')
+# DATABASE_URL = os.environ.get('DATABASE_URL')
+ENGINE_URL = config('ENGINE_URL')
+DATABASE_URL = config('DATABASE_URL')
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'connected'
 SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
@@ -83,6 +88,7 @@ SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
 #     'social_core.pipeline.social_auth.load_extra_data',
 #     'social_core.pipeline.user.user_details',
 # )
+
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
@@ -113,15 +119,18 @@ WSGI_APPLICATION = 'paint_the_world.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'grid points',
+#         'USER': os.environ.get('USER'),
+#         'PASSWORD': os.environ.get('PASSWORD'),
+#         'HOST': 'localhost'
+#     },
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'grid points',
-        'USER': os.environ.get('USER'),
-        'PASSWORD': os.environ.get('PASSWORD'),
-        'HOST': 'localhost'
-    },
-}
+    'default': dj_database_url.config(default=config('DATABASE_URL')
+)}
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
@@ -170,6 +179,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
