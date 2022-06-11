@@ -25,4 +25,4 @@ compete with friends to see who can 'paint' the most of the area within the spec
 - [X] remove 'odd' routes pathways, potentially needing each individual coordinate to be within a few meters of eachother
 - [ ] Make starting area shown on map relevant to users activities
 - [ ] Fix database structure, super clunky at the moment
-- [ Fix]
+- [X] fix requirments.txt
