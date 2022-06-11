@@ -11,26 +11,25 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-import environ
-import os
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# import environ
+# import os
+# env = environ.Env()
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 
@@ -48,11 +47,9 @@ INSTALLED_APPS = [
     'paint_the_world',
     'painting_app.apps.PaintingAppConfig',
     'social_django',
-    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,13 +60,10 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-INTERNAL_IPS = [ # For debug tool
-    "127.0.0.1"
-]
 
 ROOT_URLCONF = 'paint_the_world.urls'
 
-ENGINE_URL = env('DATABASE_URL')
+ENGINE_URL = os.environ.get('DATABASE_URL')
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'connected'
 SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
@@ -115,17 +109,13 @@ WSGI_APPLICATION = 'paint_the_world.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-import environ
-import os
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'grid points',
-        'USER': env('USER'),
-        'PASSWORD': env('PASSWORD'),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': 'localhost'
     },
 }
@@ -156,7 +146,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_STRAVA_KEY = '83588'
-SOCIAL_AUTH_STRAVA_SECRET = str(env("CLIENT_SECRET"))
+SOCIAL_AUTH_STRAVA_SECRET = str(os.environ.get("CLIENT_SECRET"))
 
 
 # Internationalization

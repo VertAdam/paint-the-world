@@ -21,7 +21,7 @@ compete with friends to see who can 'paint' the most of the area within the spec
 ### Maybes:
 - [ ] Add 'bonus point' locations that cycle every 24 hours
 - [ ] Seperate biking/walking/running
-- [ ] bar chart race animation by team (https://12ft.io/proxy?q=https%3A%2F%2Ftowardsdatascience.com%2Fcreate-a-bar-chart-race-animation-app-using-streamlit-and-raceplotly-e44495249f11)
+- [ ] bar chart race animation by color group (https://12ft.io/proxy?q=https%3A%2F%2Ftowardsdatascience.com%2Fcreate-a-bar-chart-race-animation-app-using-streamlit-and-raceplotly-e44495249f11)
 - [X] remove 'odd' routes pathways, potentially needing each individual coordinate to be within a few meters of eachother
 - [ ] Make starting area shown on map relevant to users activities
 - [ ] Fix database structure, super clunky at the moment

@@ -3,7 +3,6 @@ import requests
 import pandas as pd
 import polyline
 from sqlalchemy import create_engine
-import environ
 from paint_the_world import settings
 import random
 from painting_app.helpers import full_grid_to_tupled_df, tupled_df_to_full_grid
@@ -14,7 +13,6 @@ class StravaApi:
     def __init__(self, user):
         strava_login = user.social_auth.get(provider='strava')
         self.access_token = strava_login.extra_data['access_token']
-        env = environ.Env()
         self.engine = create_engine(settings.ENGINE_URL)
 
     # def get_user(self):
