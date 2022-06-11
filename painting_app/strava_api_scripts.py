@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 import environ
 from paint_the_world import settings
 import random
+from painting_app.helpers import full_grid_to_tupled_df, tupled_df_to_full_grid
 
 # All things related to Strava API
 
@@ -75,20 +76,22 @@ class StravaApi:
 
                 user_grid_df['grid_lat'] = round((user_grid_df['latitude'] + 90) / width).astype('int64')
                 user_grid_df['grid_long'] = round((user_grid_df['longitude'] + 180) / width).astype('int64')
-
-                full_grid_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', self.engine)
+                tupled_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', self.engine)
+                full_grid_df = tupled_df_to_full_grid(tupled_df)
                 full_grid_df['time'] = pd.to_datetime(full_grid_df['time'], utc=True)
-
                 new_grid_df = pd.concat([user_grid_df, full_grid_df]).drop_duplicates()
 
-                canvas_df = pd.DataFrame(new_grid_df.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
-                canvas_df = canvas_df[
-                    ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
+                # canvas_df = pd.DataFrame(new_grid_df.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
+                # canvas_df = canvas_df[
+                #     ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
 
                 new_activities = (~user_grid_df['activity_id'].isin(full_grid_df['activity_id'])).sum()
                 if new_activities != 0:
-                    new_grid_df.to_sql("painting_app_allgriddata", self.engine, if_exists='replace', index=False)
-                    canvas_df.to_sql("painting_app_canvasgriddata", self.engine, if_exists='replace', index=False)
+                    print(new_grid_df)
+                    new_tupled_df = full_grid_to_tupled_df(new_grid_df)
+                    print(new_tupled_df)
+                    new_tupled_df.to_sql("painting_app_allgriddata", self.engine, if_exists='replace', index=False)
+                    # canvas_df.to_sql("painting_app_canvasgriddata", self.engine, if_exists='replace', index=False)
                 return new_activities
 
             prepped_df = prep_activities_df(activities_df)
@@ -106,13 +109,9 @@ class StravaApi:
 
         user_json = requests.get(user_url, headers=header).json()
         user_data = pd.json_normalize(user_json)
-        print(user_data)
 
         current_users_df = pd.read_sql('SELECT * FROM \"painting_app_users\"', self.engine)
-        print(user_data['id'][0])
-        print(current_users_df['id'].tolist())
-        print(user_data['id'][0] in current_users_df['id'].tolist())
-        print('hi')
+
 
         if not user_data['id'][0] in current_users_df['id'].tolist():
             clr = random.choice(settings.COLOURS)

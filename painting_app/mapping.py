@@ -6,6 +6,8 @@ import pandas as pd
 from paint_the_world.settings import BASE_DIR, ENGINE_URL
 from sqlalchemy import create_engine
 import os
+from painting_app.helpers import full_grid_to_tupled_df, tupled_df_to_full_grid, full_grid_to_canvas_df
+
 """
 These scripts will be to create the GIS objects as well as mapping them onto the map
 """
@@ -57,7 +59,9 @@ def add_polygons(m, grid_lats, grid_longs, colors, times, path, weight = 0.1, fi
 def get_poly_details(map_type, userID = None):
     engine = create_engine(ENGINE_URL)
     current_users_df = pd.read_sql('SELECT * FROM \"painting_app_users\"', engine)
-    canvas_df = pd.read_sql('SELECT * FROM \"painting_app_canvasgriddata\"', engine)
+    tupled_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', engine)
+    full_grid_df = tupled_df_to_full_grid(tupled_df)
+    canvas_df = full_grid_to_canvas_df(full_grid_df)
     canvas_df_clrs = canvas_df.merge(current_users_df[['id','color']], left_on ='userID', right_on = 'id')
     if map_type == 'full':
         grid_lats = canvas_df_clrs['grid_lat'].tolist()
@@ -66,9 +70,7 @@ def get_poly_details(map_type, userID = None):
         times = canvas_df_clrs['time'].tolist()
         return grid_lats, grid_longs, colors, times
     elif map_type == 'Self Portrait':
-        all_points_df = pd.read_sql('SELECT * FROM \"painting_app_allgriddata\"', engine)
-
-        personal_canvas = all_points_df.loc[all_points_df['userID'] == int(userID)]
+        personal_canvas = full_grid_df.loc[full_grid_df['userID'] == int(userID)]
         personal_canvas = pd.DataFrame(personal_canvas.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
         personal_canvas = personal_canvas[
             ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
@@ -86,11 +88,3 @@ def get_poly_details(map_type, userID = None):
         colors = vs_world_df['color'].tolist()
         times = vs_world_df['time'].tolist()
         return grid_lats, grid_longs, colors, times
-
-
-if __name__=="__main__":
-    longitude = -82.68345
-    latitude = 41.48026
-    grid_lat, grid_long = latlong_to_gridcoords(latitude, longitude)
-    poly = gridcoords_to_polygon(grid_lat, grid_long)
-    x = 1

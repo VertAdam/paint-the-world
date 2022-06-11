@@ -93,7 +93,7 @@ def change_color(request):
     current_users_df.loc[current_users_df['id'] ==  int(userID), 'color'] = [clr]
     current_users_df.to_sql("painting_app_users", engine, if_exists='replace', index=False)
 
-    response = redirect('/connected/SelfPortrait')
+    response = redirect('/connected/FullPainting')
     return response
 
 

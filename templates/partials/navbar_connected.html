@@ -34,6 +34,20 @@
       <li class="nav-item">
       <li class="nav-item">
         <a class="nav-link text-white" href="vsWorld">You vs The World</a>
+        <li class="nav-item dropdown ">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          My Color
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a onclick="location.href='{% url 'change_color' %}?name=RED'" type="button" class="dropdown-item">Red</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=ORANGE'" type="button" class="dropdown-item">Orange</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=YELLOW'" type="button" class="dropdown-item">Yellow</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=GREEN'" type="button" class="dropdown-item">Green</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=BLUE'" type="button" class="dropdown-item">Blue</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=INDIGO'" type="button" class="dropdown-item">Indigo</a>
+          <a onclick="location.href='{% url 'change_color' %}?name=VIOLET'" type="button" class="dropdown-item">Violet</a>
+        </div>
+      </li>
       <li class="nav-item">
         <a class="nav-link disabled">Stats (Coming soon!)</a>
       </li>
