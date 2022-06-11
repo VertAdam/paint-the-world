@@ -1,0 +1,55 @@
+{% extends 'partials/base_connected.html' %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    <main role="main" class="container">
+      <div class="row" style="padding-bottom:50px">
+        <div class="col-md-10 offset-md-1 blog-main">
+          <h1 class="text-center pb-3 pt-3 mb-4 border-bottom">
+            About Paint the World
+          </h1>
+
+          <div class="blog-post">
+              <h2>What is Paint the World</h2>
+              <p>Paint the World is a dynamically updating map that takes users Strava activities and plots their activity locations onto a variety of maps.</p>
+              <p>It works by dividing the world into cells and then determining all the cells you have walked/biked/frolicked through and colouring those with the colour of your choice.</p>
+
+              <p>The available maps are:</p>
+              <ul>
+                  <li>Full Painting: A map with all cells travelled through by any user coloured in that users colour</li>
+                      <ul>
+                          <li>If two or more users have travelled on the same cell, the user whose activity was most recent will colour the cell</li>
+                      </ul>
+                  <li>Your Painting: A map with all of the cells you have travelled through coloured in your colour</li>
+                  <li>You vs The World: Identical to the Full Painting except it makes ever other users cell coloured black, letting you see more clearly your contribution to the full painting</li>
+                  <li>Stats (coming soon): This displays a variety of statistics including the number of cells you've painted on the full-painting, your total cells painted and total amount of colour painted on each map</li>
+                    <ul>
+                        <li>I hope to add more advanced statistics when enough activity data has been uploaded (i.e. Rural vs City cells, most commonly visited cells, etc.) </li>
+                    </ul>
+                  <li>Groups (not currently implemented): Allow you to select users that you want to create a painting with, this will then create a map equivalent to a Full Painting but only including your friends </li>
+              </ul>
+              <p>To get started, <strong>connect to strava by clicking on the blue button at the top right.</strong></p>
+
+
+              <p>Enjoy Painting!</p>
+              <p>Adam</p>
+              <hr>
+              <h2>For Developers</h2>
+              <p>If you are a developer, or simply interested in seeing how this was made, feel free to check out my Medium articles about this project</p>
+              <ul>
+                  <li><a href="#">How to use Python and Folium to extract and plot Strava Data (coming soon)</a></li>
+                  <li><a href="#">Paint the World: How to build a Django app with Strava data and Folium maps (coming soon)</a></li>
+              </ul>
+              <p>or the code for this website at</p>
+              <ul>
+                  <li><a href="https://github.com/VertAdam/paint-the-world">github.com/VertAdam/paint-the-world</a></li>
+              </ul>
+              <p>Also, if you have any feedback, suggestions or opportunities, I would love to hear from you. For my contact information check out the <a href="about_me">About me page</a></p>
+              <hr>
+          </div>
+        </div><!-- /.blog-main -->
+
+      </div><!-- /.row -->
+
+    </main><!-- /.container -->
+{% endblock %}

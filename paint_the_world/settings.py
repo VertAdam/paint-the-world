@@ -32,6 +32,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+
 COLOURS=['RED','ORANGE','YELLOW','GREEN','BLUE','INDIGO']
 
 # Application definition
@@ -86,6 +88,9 @@ SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
 #     'social_core.pipeline.social_auth.load_extra_data',
 #     'social_core.pipeline.user.user_details',
 # )
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 TEMPLATES = [
     {

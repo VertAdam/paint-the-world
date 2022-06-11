@@ -91,3 +91,12 @@ def change_color(request):
 
     response = redirect('/connected/SelfPortrait')
     return response
+
+
+def about_me(request):
+    response = render(request, 'painting_app/about_me.html')
+    return response
+
+def about_project(request):
+    response = render(request, 'painting_app/about_project.html')
+    return response
