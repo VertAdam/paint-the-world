@@ -62,7 +62,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'paint_the_world.urls'
 
-ENGINE_URL = os.environ.get('DATABASE_URL')
+ENGINE_URL = os.environ.get('ENGINE_URL')
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'connected'
 SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
