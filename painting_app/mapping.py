@@ -1,7 +1,4 @@
-from shapely.geometry import Polygon
-from shapely import wkt
 import folium
-import geopandas as gpd
 import pandas as pd
 from paint_the_world.settings import BASE_DIR, ENGINE_URL
 from sqlalchemy import create_engine

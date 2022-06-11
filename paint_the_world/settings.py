@@ -60,7 +60,6 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-
 ROOT_URLCONF = 'paint_the_world.urls'
 
 ENGINE_URL = os.environ.get('DATABASE_URL')
@@ -172,3 +171,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import django_heroku
+django_heroku.settings(locals())

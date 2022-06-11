@@ -1,5 +1,5 @@
-from django.urls import path, include
-from django.conf.urls import url
+from django.urls import path, include, re_path
+# from django.conf.urls import url
 from .views import *
 
 # urlpatterns = [
@@ -18,5 +18,5 @@ urlpatterns = [
     path('connected/about_me', about_me, name='about_me'),
     path('about_project', about_project, name='about_project'),
     path('about_me', about_me, name='about_me'),
-    url(r"^oauth/", include("social_django.urls", namespace="social")),
+    re_path(r"^oauth/", include("social_django.urls", namespace="social")),
 ]
