@@ -72,9 +72,7 @@ def get_poly_details(map_type, userID = None):
         personal_canvas = pd.DataFrame(personal_canvas.sort_values('time').groupby(['grid_lat', 'grid_long']).last()).reset_index()
         personal_canvas = personal_canvas[
             ['activity_id', 'userID', 'latitude', 'longitude', 'time', 'grid_lat', 'grid_long']]
-
         personal_canvas_clrs = personal_canvas.merge(current_users_df[['id', 'color']], left_on='userID', right_on='id')
-
         grid_lats = personal_canvas_clrs['grid_lat'].tolist()
         grid_longs = personal_canvas_clrs['grid_long'].tolist()
         colors = personal_canvas_clrs['color'].tolist()

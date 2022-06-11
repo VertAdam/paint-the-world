@@ -1,16 +1,9 @@
 from social_django.models import UserSocialAuth
-from django.db import transaction
 import requests
 import pandas as pd
 import polyline
-from .models import AllGridData, CanvasGridData
-from .mapping import gridcoords_to_polygon, latlong_to_gridcoords
-import datetime
-import time
-import numpy as np
 from sqlalchemy import create_engine
 import environ
-import os
 from paint_the_world import settings
 import random
 

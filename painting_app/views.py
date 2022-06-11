@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 import folium
-from .models import CanvasGridData
 from .mapping import add_polygons, get_poly_details
-import random
 from .strava_api_scripts import StravaApi
 from paint_the_world.settings import BASE_DIR, ENGINE_URL
 import os
@@ -46,6 +44,12 @@ def connected_view(request):
 
 def connected_fullpainting(request):
     path = os.path.join(BASE_DIR, 'templates', 'maps', 'full_map.txt')
+
+    map1 = folium.Map(tiles='stamentoner', location = [43.45005, -80.42766], zoom_start = 15,prefer_canvas = True)
+
+    grid_lats, grid_longs, colors, times = get_poly_details('full')
+    add_polygons(map1, grid_lats,grid_longs, path =  path, colors = colors, times = times)
+
     context ={
         'map_path': path
     }
