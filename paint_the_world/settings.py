@@ -35,7 +35,6 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 ALLOWED_HOSTS = ['paint-the-world.herokuapp.com']
 
 
-
 COLOURS=['RED','ORANGE','YELLOW','GREEN','BLUE','INDIGO']
 
 # Application definition
@@ -85,6 +84,8 @@ SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
 #     'social_core.pipeline.user.user_details',
 # )
 
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 
