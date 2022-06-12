@@ -156,7 +156,8 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.strava.StravaOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
-
+# LOGIN_REDIRECT_URL = '/connected/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/connected/'
 SOCIAL_AUTH_STRAVA_KEY = '83588'
 SOCIAL_AUTH_STRAVA_SECRET = str(os.environ.get("CLIENT_SECRET"))
 
