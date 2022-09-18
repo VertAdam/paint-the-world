@@ -12,9 +12,9 @@ compete with friends to see who can 'paint' the most of the area within the spec
   - Ignoring time frame parsing for now
 - [x] Get django running (or consider using streamlit?)
 - [ ] add stats page
-- [ ] add about me/contact page
-- [ ] add a "about the project" page
-- [ ] upload to heroku
+- [x] add about me/contact page
+- [x] add a "about the project" page
+- [x] upload to heroku
 - [ ] create a readme file for the project
 - [ ] create a medium article for the project
 
