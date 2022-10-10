@@ -15,7 +15,7 @@ The available maps are:
 - **Groups (not currently implemented)**: Allow you to select users that you want to create a painting with, this will then create a map equivalent to a Full Painting but only including your friends
     To get started, connect to strava by clicking on the blue button at the top right.
 
-##About
+## About
 After graduating from University of Waterloo in April me and many of the friends I have made from my time at University were moving onto the next stage of our lives. For many of us, this meant relocating for work. 
 
 In the months following my graduation I spent some time working on a personal project in which I created a website to connect all of our smartwatch activity data and plot it onto an interactive world map. I called the website "Paint the World" with the end objective to see how much of the world we can "paint" with our activities. Each person can select their own colour and whenever an activity is  recorded through Strava , that persons activity data will be uploaded to our shared map. This way, whether we are in different provinces, countries or even continents, we still have a level of connection in this map of our collective travels.
