@@ -1,4 +1,4 @@
-#Paint the World
+# Paint the World
 ![](https://drive.google.com/uc?export=view&id=1N9EbVyUTWVCz8F084CRYY4rErKRPYLt-)
 Paint the World is a dynamically updating map that takes users Strava activities and plots their activity locations onto a variety of maps.
 
