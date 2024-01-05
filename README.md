@@ -38,7 +38,6 @@ In the months following my graduation I spent some time working on a personal pr
 - [x] add about me/contact page
 - [x] add a "about the project" page
 - [x] upload to heroku
-- [ ] create a readme file for the project
 - [X] create a medium article for the project
 
 ### Maybes:
